@@ -9,4 +9,4 @@ nodes:
         kind: InitConfiguration
         nodeRegistration:
           kubeletExtraArgs:
-            system-reserved: memory=2Gi
+            system-reserved: memory=3.5Gi
