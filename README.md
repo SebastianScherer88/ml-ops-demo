@@ -1,5 +1,7 @@
 # Setup
 
+The below setup was successfully tested on an AWS EC2 `t2.medium` instance.
+
 1. Install docker by running `install_docker.sh`
 2. Install `kind` by running `install_kind.sh`.
 3. Install `helm` by running `install_helm.sh`.
