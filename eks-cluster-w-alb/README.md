@@ -1,9 +1,81 @@
 # Overview
 
-Taken directly from [the amazing tutorial 112](https://github.com/antonputra/tutorials/tree/main/lessons/112) by [`antonputra`](https://github.com/antonputra) with only minor adjustments.
+Taken directly from [the amazing tutorial 112](https://github.com/antonputra/tutorials/tree/main/lessons/112) by [`antonputra`](https://github.com/antonputra) with only minor adjustments, this project creates a minimal EKS cluster, installs a selection of helm charts and creates and tests an internet facing application load balancer with ingress.
 
-# Run the stack
+# Create EKS cluster
 
-1. Create EKS cluster by running `terraform apply` on the `infrastructure` directory. Note that the `10-helm.tf` module deploys the alb controller deployment in the cluster automatically (but does not create a load balancer yet!)
-2. Configure `kubectl` with new EKS cluster by runnign `aws eks update-kubeconfig --name $(terraform output -raw eks_cluster_id) --region $(terraform output -raw eks_cluster_region)`
-3. Deploy the cluster application + ALB by running `kubectly apply -f` on the `manifests` directory.
+You can configure which K8s components you want to install using terraform's `helm` provisioner during the creation of the cluster - simply toggle the respective variables in the `variables.tf` file.
+
+By default, the following components **will** be installed as helm charts during cluster provisioning:
+- [cert-manager](https://cert-manager.io/docs/installation/helm/)
+- [aws-load-balancer-controller](https://artifacthub.io/packages/helm/aws/aws-load-balancer-controller)
+- [metrics-server](https://artifacthub.io/packages/helm/metrics-server/metrics-server)
+
+Change into the `infrastructure` diretory and create the EKS cluster by running 
+
+```bash
+terraform apply
+``` 
+
+Then, configure `kubectl` with new EKS cluster by running
+
+```bash
+aws eks update-kubeconfig --name $(terraform output -raw eks_cluster_id) --region $(terraform output -raw eks_cluster_region)
+```
+
+# Create ALB and sample deployment
+
+Change into the `manifests` directory before running the below.
+
+The below manifests will
+- create a sample echo server app
+- create an ingress that points to the sample app and creates a load balancer
+
+```bash
+kubectl apply -f alb-example/namespace.yaml # create namespace
+kubectl apply -f alb-example/ # deploy remaining stack
+```
+
+To test this service, change into the `code` directory and run
+
+```bash
+python test_alb_example.py
+```
+
+You should see a reponse along the lines of
+
+```
+ALB URL: http://k8s-albexamp-echoserv-016cf360fa-438199677.eu-west-2.elb.amazonaws.com
+Response status code: 200
+Response content: 
+
+Hostname: echoserver-6c456d4fcc-drfnz
+
+Pod Information:
+        -no pod information available-
+
+Server values:
+        server_version=nginx: 1.14.2 - lua: 10015
+
+Request Information:
+        client_address=10.0.2.125
+        method=GET
+        real path=/
+        query=
+        request_version=1.1
+        request_scheme=http
+        request_uri=http://echo.devopsbyexample.io:8080/
+
+Request Headers:
+        accept=*/*
+        accept-encoding=gzip, deflate
+        host=echo.devopsbyexample.io
+        user-agent=python-requests/2.31.0
+        x-amzn-trace-id=Root=1-662027c0-371c8c920377ff9b0224770e
+        x-forwarded-for=34.226.122.148
+        x-forwarded-port=80
+        x-forwarded-proto=http
+
+Request Body:
+        -no body in request-
+```

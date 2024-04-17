@@ -35,15 +35,3 @@ resource "aws_eks_cluster" "cluster" {
 
   depends_on = [aws_iam_role_policy_attachment.amazon-eks-cluster-policy-attach]
 }
-
-output "eks_cluster_region" {
-  value = var.region
-}
-
-output "eks_cluster_endpoint" {
-  value = aws_eks_cluster.cluster.endpoint
-}
-
-output "eks_cluster_id" {
-  value = aws_eks_cluster.cluster.id
-}

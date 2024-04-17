@@ -1,0 +1,81 @@
+- app_version: v2.7.2
+  description: AWS Load Balancer Controller Helm chart for Kubernetes
+  name: aws-load-balancer-controller/aws-load-balancer-controller
+  version: 1.7.2
+- app_version: ""
+  description: A Helm chart for Amazon EC2 Metadata Mock
+  name: aws-load-balancer-controller/amazon-ec2-metadata-mock
+  version: 1.11.2
+- app_version: 1.12.7
+  description: App Mesh controller Helm chart for Kubernetes
+  name: aws-load-balancer-controller/appmesh-controller
+  version: 1.12.7
+- app_version: 1.0.0
+  description: App Mesh Gateway Helm chart for Kubernetes
+  name: aws-load-balancer-controller/appmesh-gateway
+  version: 0.1.5
+- app_version: 6.4.3
+  description: App Mesh Grafana Helm chart for Kubernetes
+  name: aws-load-balancer-controller/appmesh-grafana
+  version: 1.0.4
+- app_version: 0.5.0
+  description: App Mesh Inject Helm chart for Kubernetes
+  name: aws-load-balancer-controller/appmesh-inject
+  version: 0.14.8
+- app_version: 1.29.0
+  description: App Mesh Jaeger Helm chart for Kubernetes
+  name: aws-load-balancer-controller/appmesh-jaeger
+  version: 1.0.3
+- app_version: 2.13.1
+  description: App Mesh Prometheus Helm chart for Kubernetes
+  name: aws-load-balancer-controller/appmesh-prometheus
+  version: 1.0.3
+- app_version: 1.5.0
+  description: SPIRE Agent Helm chart for AppMesh mTLS support on Kubernetes
+  name: aws-load-balancer-controller/appmesh-spire-agent
+  version: 1.0.7
+- app_version: 1.5.0
+  description: SPIRE Server Helm chart for AppMesh mTLS support on Kubernetes
+  name: aws-load-balancer-controller/appmesh-spire-server
+  version: 1.0.7
+- app_version: 3.19.1
+  description: A Helm chart for installing Calico on AWS
+  name: aws-load-balancer-controller/aws-calico
+  version: 0.3.11
+- app_version: 1.300032.2b361
+  description: A Helm chart to deploy aws-cloudwatch-metrics project
+  name: aws-load-balancer-controller/aws-cloudwatch-metrics
+  version: 0.0.11
+- app_version: v0.4.4
+  description: A Helm chart for EFA device plugin.
+  name: aws-load-balancer-controller/aws-efa-k8s-device-plugin
+  version: v0.4.4
+- app_version: 2.31.12.20231011
+  description: A Helm chart to deploy aws-for-fluent-bit project
+  name: aws-load-balancer-controller/aws-for-fluent-bit
+  version: 0.1.32
+- app_version: 1.19.0
+  description: A Helm chart for the AWS Node Termination Handler.
+  name: aws-load-balancer-controller/aws-node-termination-handler
+  version: 0.21.0
+- app_version: 2.0.0-beta
+  description: A Helm chart for aws-node-termination-handler, an open-source component
+    for gracefully handling termination events for node hosted in AWS.
+  name: aws-load-balancer-controller/aws-node-termination-handler-2
+  version: 0.2.0
+- app_version: "1"
+  description: AWS SIGv4 Admission Controller Helm Chart for Kubernetes
+  name: aws-load-balancer-controller/aws-sigv4-proxy-admission-controller
+  version: 0.1.2
+- app_version: v1.18.0
+  description: A Helm chart for the AWS VPC CNI
+  name: aws-load-balancer-controller/aws-vpc-cni
+  version: 1.18.0
+- app_version: v1.18.0
+  description: A Helm chart for the AWS VPC CNI Metrics Helper
+  name: aws-load-balancer-controller/cni-metrics-helper
+  version: 1.18.0
+- app_version: 1.0.r2-6-gee95299-2022.04.14.21.07
+  description: This Helm chart is deprecated, please switch to https://aws.github.io/secrets-store-csi-driver-provider-aws/
+  name: aws-load-balancer-controller/csi-secrets-store-provider-aws
+  version: 0.0.4

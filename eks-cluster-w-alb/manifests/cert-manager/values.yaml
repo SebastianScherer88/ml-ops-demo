@@ -1,0 +1,5 @@
+global:
+  leaderElection:
+    namespace: cert-manager
+clusterResourceNamespace: cert-manager
+namespace: cert-manager

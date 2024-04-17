@@ -1,0 +1,11 @@
+image:
+  tag: v2.4.2
+
+clusterName: mlops-demo
+
+serviceAccount:
+  name: aws-load-balancer-controller
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::743582000746:role/aws-load-balancer-controller
+
+#enableCertManager: true
