@@ -11,7 +11,7 @@ By default, the following components **will** be installed as helm charts during
 - [aws-load-balancer-controller](https://artifacthub.io/packages/helm/aws/aws-load-balancer-controller)
 - [metrics-server](https://artifacthub.io/packages/helm/metrics-server/metrics-server)
 
-Change into the `infrastructure` diretory and create the EKS cluster by running 
+Change into the `infrastructure` directory and create the EKS cluster by running 
 
 ```bash
 terraform apply
@@ -42,7 +42,7 @@ To test this service, change into the `code` directory and run
 python test_alb_example.py
 ```
 
-You should see a reponse along the lines of
+You should see a response along the lines of
 
 ```
 ALB URL: http://k8s-albexamp-echoserv-016cf360fa-438199677.eu-west-2.elb.amazonaws.com
