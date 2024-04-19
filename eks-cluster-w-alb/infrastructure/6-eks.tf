@@ -35,3 +35,27 @@ resource "aws_eks_cluster" "cluster" {
 
   depends_on = [aws_iam_role_policy_attachment.amazon-eks-cluster-policy-attach]
 }
+
+data "aws_eks_addon_version" "ebs-latest" {
+  addon_name         = "aws-ebs-csi-driver"
+  kubernetes_version = aws_eks_cluster.cluster.version
+  most_recent        = true
+}
+
+data "aws_eks_addon_version" "efs-latest" {
+  addon_name         = "aws-efs-csi-driver"
+  kubernetes_version = aws_eks_cluster.cluster.version
+  most_recent        = true
+}
+
+resource "aws_eks_addon" "aws-ebs-csi-driver" {
+  cluster_name  = aws_eks_cluster.cluster.name
+  addon_name    = "aws-ebs-csi-driver"
+  addon_version = data.aws_eks_addon_version.ebs-latest.version
+}
+
+resource "aws_eks_addon" "aws-efs-csi-driver" {
+  cluster_name  = aws_eks_cluster.cluster.name
+  addon_name    = "aws-efs-csi-driver"
+  addon_version = data.aws_eks_addon_version.efs-latest.version
+}

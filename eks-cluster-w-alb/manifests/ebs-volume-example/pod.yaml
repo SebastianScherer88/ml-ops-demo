@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: storage-app
+  namespace: storage
+spec:
+  containers:
+  - name: app
+    image: centos
+    command: ["/bin/sh"]
+    args: ["-c", "while true; do echo $(date -u) >> /data/out.txt; sleep 5; done"]
+    volumeMounts:
+    - name: ebs-volume
+      mountPath: /data
+  volumes:
+  - name: ebs-volume
+    persistentVolumeClaim:
+      claimName: ebs-pvc

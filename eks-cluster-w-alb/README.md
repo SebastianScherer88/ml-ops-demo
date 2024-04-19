@@ -23,7 +23,7 @@ Then, configure `kubectl` with new EKS cluster by running
 aws eks update-kubeconfig --name $(terraform output -raw eks_cluster_id) --region $(terraform output -raw eks_cluster_region)
 ```
 
-# Create ALB and sample deployment
+# `alb-example`: Create ALB and sample deployment
 
 Change into the `manifests` directory before running the below.
 
@@ -78,4 +78,18 @@ Request Headers:
 
 Request Body:
         -no body in request-
+```
+
+# `ebs-volume`: Create and mount an EBS-backed volume
+
+# `efs-volume`: Create and mount an EFS-backed volume
+
+Run
+
+```bash
+kubectl apply -f efs-volume/namespace.yaml
+```
+
+```bash
+kubectl apply -f efs-volume
 ```

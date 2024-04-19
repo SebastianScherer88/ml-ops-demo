@@ -23,6 +23,22 @@ variable "cluster_version" {
   default = "1.29"
 }
 
+variable "cidr_block_private_eu_west_2a" {
+  default = "10.0.0.0/19"
+}
+
+variable "cidr_block_private_eu_west_2b" {
+  default = "10.0.32.0/19"
+}
+
+variable "cidr_block_public_eu_west_2a" {
+  default = "10.0.64.0/19"
+}
+
+variable "cidr_block_public_eu_west_2b" {
+  default = "10.0.96.0/19"
+}
+
 variable "helm_cert_manager" {
   description = "Helm chart installation specs for the cert-manager component (required for ALB) used during cluster provisioning."
   default = {
@@ -64,7 +80,7 @@ variable "helm_aws_load_balancer_controller" {
 variable "helm_metrics_server" {
   description = "Helm chart installation specs for the metrics-server component (required for HPA) used during cluster provisioning."
   default = {
-    install            = true
+    install            = false
     repository         = "https://kubernetes-sigs.github.io/metrics-server/"
     chart_name         = "metrics-server"
     chart_version      = "3.12.1"
@@ -75,6 +91,28 @@ variable "helm_metrics_server" {
     template_values = {
       "image.tag"           = "v0.7.1",
       "serviceAccount.name" = "metrics-server",
+    }
+  }
+}
+
+variable "helm_observability" {
+  description = "Helm chart installation specs for the prometheus + grafana components used during cluster provisioning."
+  default = {
+    install            = false
+    repository         = "https://prometheus-community.github.io/helm-charts"
+    chart_name         = "kube-prometheus-stack"
+    chart_version      = "58.1.3"
+    chart_release_name = "observability"
+    namespace          = "prometheus"
+    create_namespace   = true
+
+    template_values = {
+      # prometheus namespace
+      "prometheus.serviceAccount.name"         = "prometheus",
+      "prometheusOperator.serviceAccount.name" = "prometheus-operator",
+      "grafana.serviceAccount.name"            = "grafana",
+      # kube system namespace
+      "kube-state-metrics.namespaceOverride" = "kube-system",
     }
   }
 }
