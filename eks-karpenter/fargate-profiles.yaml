@@ -1,0 +1,28 @@
+- name: karpenter
+  podExecutionRoleARN: arn:aws:iam::743582000746:role/karpenter-20240423155048986300000002
+  selectors:
+  - namespace: karpenter
+  status: ACTIVE
+  subnets:
+  - subnet-05b0d017357118b1a
+  - subnet-02550f7dd1b5bafb5
+  - subnet-01e1b82bff890a52a
+  tags:
+    Example: eks-karpenter
+    GithubOrg: terraform-aws-modules
+    GithubRepo: terraform-aws-eks
+    karpenter.sh/discovery: eks-karpenter
+- name: kube-system
+  podExecutionRoleARN: arn:aws:iam::743582000746:role/kube-system-20240423155048981600000001
+  selectors:
+  - namespace: kube-system
+  status: ACTIVE
+  subnets:
+  - subnet-05b0d017357118b1a
+  - subnet-02550f7dd1b5bafb5
+  - subnet-01e1b82bff890a52a
+  tags:
+    Example: eks-karpenter
+    GithubOrg: terraform-aws-modules
+    GithubRepo: terraform-aws-eks
+    karpenter.sh/discovery: eks-karpenter

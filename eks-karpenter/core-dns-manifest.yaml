@@ -1,0 +1,549 @@
+{
+  "kind": "Pod",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "coredns-84c5bbcb4c-25wcb",
+    "generateName": "coredns-84c5bbcb4c-",
+    "namespace": "kube-system",
+    "uid": "e1928953-708d-4d95-92f3-deef9470d6ba",
+    "resourceVersion": "1839",
+    "creationTimestamp": "2024-04-23T16:03:56Z",
+    "labels": {
+      "eks.amazonaws.com/component": "coredns",
+      "eks.amazonaws.com/fargate-profile": "kube-system",
+      "k8s-app": "kube-dns",
+      "pod-template-hash": "84c5bbcb4c"
+    },
+    "annotations": {
+      "CapacityProvisioned": "0.25vCPU 0.5GB",
+      "Logging": "LoggingDisabled: LOGGING_CONFIGMAP_NOT_FOUND",
+      "eks.amazonaws.com/compute-type": "Fargate"
+    },
+    "ownerReferences": [
+      {
+        "apiVersion": "apps/v1",
+        "kind": "ReplicaSet",
+        "name": "coredns-84c5bbcb4c",
+        "uid": "9f1e69e9-c3d8-4caf-9459-1abde8eca3db",
+        "controller": true,
+        "blockOwnerDeletion": true
+      }
+    ],
+    "managedFields": [
+      {
+        "manager": "kube-controller-manager",
+        "operation": "Update",
+        "apiVersion": "v1",
+        "time": "2024-04-23T16:03:56Z",
+        "fieldsType": "FieldsV1",
+        "fieldsV1": {
+          "f:metadata": {
+            "f:annotations": {
+              ".": {},
+              "f:eks.amazonaws.com/compute-type": {}
+            },
+            "f:generateName": {},
+            "f:labels": {
+              ".": {},
+              "f:eks.amazonaws.com/component": {},
+              "f:k8s-app": {},
+              "f:pod-template-hash": {}
+            },
+            "f:ownerReferences": {
+              ".": {},
+              "k:{\"uid\":\"9f1e69e9-c3d8-4caf-9459-1abde8eca3db\"}": {}
+            }
+          },
+          "f:spec": {
+            "f:affinity": {
+              ".": {},
+              "f:nodeAffinity": {
+                ".": {},
+                "f:requiredDuringSchedulingIgnoredDuringExecution": {}
+              },
+              "f:podAntiAffinity": {
+                ".": {},
+                "f:preferredDuringSchedulingIgnoredDuringExecution": {}
+              }
+            },
+            "f:containers": {
+              "k:{\"name\":\"coredns\"}": {
+                ".": {},
+                "f:args": {},
+                "f:image": {},
+                "f:imagePullPolicy": {},
+                "f:livenessProbe": {
+                  ".": {},
+                  "f:failureThreshold": {},
+                  "f:httpGet": {
+                    ".": {},
+                    "f:path": {},
+                    "f:port": {},
+                    "f:scheme": {}
+                  },
+                  "f:initialDelaySeconds": {},
+                  "f:periodSeconds": {},
+                  "f:successThreshold": {},
+                  "f:timeoutSeconds": {}
+                },
+                "f:name": {},
+                "f:ports": {
+                  ".": {},
+                  "k:{\"containerPort\":53,\"protocol\":\"TCP\"}": {
+                    ".": {},
+                    "f:containerPort": {},
+                    "f:name": {},
+                    "f:protocol": {}
+                  },
+                  "k:{\"containerPort\":53,\"protocol\":\"UDP\"}": {
+                    ".": {},
+                    "f:containerPort": {},
+                    "f:name": {},
+                    "f:protocol": {}
+                  },
+                  "k:{\"containerPort\":9153,\"protocol\":\"TCP\"}": {
+                    ".": {},
+                    "f:containerPort": {},
+                    "f:name": {},
+                    "f:protocol": {}
+                  }
+                },
+                "f:readinessProbe": {
+                  ".": {},
+                  "f:failureThreshold": {},
+                  "f:httpGet": {
+                    ".": {},
+                    "f:path": {},
+                    "f:port": {},
+                    "f:scheme": {}
+                  },
+                  "f:periodSeconds": {},
+                  "f:successThreshold": {},
+                  "f:timeoutSeconds": {}
+                },
+                "f:resources": {
+                  ".": {},
+                  "f:limits": {
+                    ".": {},
+                    "f:cpu": {},
+                    "f:memory": {}
+                  },
+                  "f:requests": {
+                    ".": {},
+                    "f:cpu": {},
+                    "f:memory": {}
+                  }
+                },
+                "f:securityContext": {
+                  ".": {},
+                  "f:allowPrivilegeEscalation": {},
+                  "f:capabilities": {
+                    ".": {},
+                    "f:add": {},
+                    "f:drop": {}
+                  },
+                  "f:readOnlyRootFilesystem": {}
+                },
+                "f:terminationMessagePath": {},
+                "f:terminationMessagePolicy": {},
+                "f:volumeMounts": {
+                  ".": {},
+                  "k:{\"mountPath\":\"/etc/coredns\"}": {
+                    ".": {},
+                    "f:mountPath": {},
+                    "f:name": {},
+                    "f:readOnly": {}
+                  }
+                }
+              }
+            },
+            "f:dnsPolicy": {},
+            "f:enableServiceLinks": {},
+            "f:priorityClassName": {},
+            "f:restartPolicy": {},
+            "f:schedulerName": {},
+            "f:securityContext": {},
+            "f:serviceAccount": {},
+            "f:serviceAccountName": {},
+            "f:terminationGracePeriodSeconds": {},
+            "f:tolerations": {},
+            "f:volumes": {
+              ".": {},
+              "k:{\"name\":\"config-volume\"}": {
+                ".": {},
+                "f:configMap": {
+                  ".": {},
+                  "f:defaultMode": {},
+                  "f:items": {},
+                  "f:name": {}
+                },
+                "f:name": {}
+              }
+            }
+          }
+        }
+      },
+      {
+        "manager": "eks-fargate-scheduler",
+        "operation": "Update",
+        "apiVersion": "v1",
+        "time": "2024-04-23T16:03:57Z",
+        "fieldsType": "FieldsV1",
+        "fieldsV1": {
+          "f:metadata": {
+            "f:annotations": {
+              "f:CapacityProvisioned": {},
+              "f:Logging": {}
+            }
+          }
+        },
+        "subresource": "status"
+      },
+      {
+        "manager": "kubelet",
+        "operation": "Update",
+        "apiVersion": "v1",
+        "time": "2024-04-23T16:04:47Z",
+        "fieldsType": "FieldsV1",
+        "fieldsV1": {
+          "f:status": {
+            "f:conditions": {
+              "k:{\"type\":\"ContainersReady\"}": {
+                ".": {},
+                "f:lastProbeTime": {},
+                "f:lastTransitionTime": {},
+                "f:status": {},
+                "f:type": {}
+              },
+              "k:{\"type\":\"Initialized\"}": {
+                ".": {},
+                "f:lastProbeTime": {},
+                "f:lastTransitionTime": {},
+                "f:status": {},
+                "f:type": {}
+              },
+              "k:{\"type\":\"PodReadyToStartContainers\"}": {
+                ".": {},
+                "f:lastProbeTime": {},
+                "f:lastTransitionTime": {},
+                "f:status": {},
+                "f:type": {}
+              },
+              "k:{\"type\":\"Ready\"}": {
+                ".": {},
+                "f:lastProbeTime": {},
+                "f:lastTransitionTime": {},
+                "f:status": {},
+                "f:type": {}
+              }
+            },
+            "f:containerStatuses": {},
+            "f:hostIP": {},
+            "f:hostIPs": {},
+            "f:phase": {},
+            "f:podIP": {},
+            "f:podIPs": {
+              ".": {},
+              "k:{\"ip\":\"10.0.17.237\"}": {
+                ".": {},
+                "f:ip": {}
+              }
+            },
+            "f:startTime": {}
+          }
+        },
+        "subresource": "status"
+      }
+    ]
+  },
+  "spec": {
+    "volumes": [
+      {
+        "name": "config-volume",
+        "configMap": {
+          "name": "coredns",
+          "items": [
+            {
+              "key": "Corefile",
+              "path": "Corefile"
+            }
+          ],
+          "defaultMode": 420
+        }
+      },
+      {
+        "name": "kube-api-access-4pgcv",
+        "projected": {
+          "sources": [
+            {
+              "serviceAccountToken": {
+                "expirationSeconds": 3607,
+                "path": "token"
+              }
+            },
+            {
+              "configMap": {
+                "name": "kube-root-ca.crt",
+                "items": [
+                  {
+                    "key": "ca.crt",
+                    "path": "ca.crt"
+                  }
+                ]
+              }
+            },
+            {
+              "downwardAPI": {
+                "items": [
+                  {
+                    "path": "namespace",
+                    "fieldRef": {
+                      "apiVersion": "v1",
+                      "fieldPath": "metadata.namespace"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "defaultMode": 420
+        }
+      }
+    ],
+    "containers": [
+      {
+        "name": "coredns",
+        "image": "602401143452.dkr.ecr.eu-west-2.amazonaws.com/eks/coredns:v1.11.1-eksbuild.4",
+        "args": [
+          "-conf",
+          "/etc/coredns/Corefile"
+        ],
+        "ports": [
+          {
+            "name": "dns",
+            "containerPort": 53,
+            "protocol": "UDP"
+          },
+          {
+            "name": "dns-tcp",
+            "containerPort": 53,
+            "protocol": "TCP"
+          },
+          {
+            "name": "metrics",
+            "containerPort": 9153,
+            "protocol": "TCP"
+          }
+        ],
+        "resources": {
+          "limits": {
+            "cpu": "250m",
+            "memory": "256M"
+          },
+          "requests": {
+            "cpu": "250m",
+            "memory": "256M"
+          }
+        },
+        "volumeMounts": [
+          {
+            "name": "config-volume",
+            "readOnly": true,
+            "mountPath": "/etc/coredns"
+          },
+          {
+            "name": "kube-api-access-4pgcv",
+            "readOnly": true,
+            "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount"
+          }
+        ],
+        "livenessProbe": {
+          "httpGet": {
+            "path": "/health",
+            "port": 8080,
+            "scheme": "HTTP"
+          },
+          "initialDelaySeconds": 60,
+          "timeoutSeconds": 5,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 5
+        },
+        "readinessProbe": {
+          "httpGet": {
+            "path": "/ready",
+            "port": 8181,
+            "scheme": "HTTP"
+          },
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
+        "terminationMessagePath": "/dev/termination-log",
+        "terminationMessagePolicy": "File",
+        "imagePullPolicy": "IfNotPresent",
+        "securityContext": {
+          "capabilities": {
+            "add": [
+              "NET_BIND_SERVICE"
+            ],
+            "drop": [
+              "ALL"
+            ]
+          },
+          "readOnlyRootFilesystem": true,
+          "allowPrivilegeEscalation": false
+        }
+      }
+    ],
+    "restartPolicy": "Always",
+    "terminationGracePeriodSeconds": 30,
+    "dnsPolicy": "Default",
+    "serviceAccountName": "coredns",
+    "serviceAccount": "coredns",
+    "nodeName": "fargate-ip-10-0-17-237.eu-west-2.compute.internal",
+    "securityContext": {},
+    "affinity": {
+      "nodeAffinity": {
+        "requiredDuringSchedulingIgnoredDuringExecution": {
+          "nodeSelectorTerms": [
+            {
+              "matchExpressions": [
+                {
+                  "key": "kubernetes.io/os",
+                  "operator": "In",
+                  "values": [
+                    "linux"
+                  ]
+                },
+                {
+                  "key": "kubernetes.io/arch",
+                  "operator": "In",
+                  "values": [
+                    "amd64",
+                    "arm64"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "podAntiAffinity": {
+        "preferredDuringSchedulingIgnoredDuringExecution": [
+          {
+            "weight": 100,
+            "podAffinityTerm": {
+              "labelSelector": {
+                "matchExpressions": [
+                  {
+                    "key": "k8s-app",
+                    "operator": "In",
+                    "values": [
+                      "kube-dns"
+                    ]
+                  }
+                ]
+              },
+              "topologyKey": "kubernetes.io/hostname"
+            }
+          }
+        ]
+      }
+    },
+    "schedulerName": "fargate-scheduler",
+    "tolerations": [
+      {
+        "key": "node-role.kubernetes.io/control-plane",
+        "effect": "NoSchedule"
+      },
+      {
+        "key": "CriticalAddonsOnly",
+        "operator": "Exists"
+      },
+      {
+        "key": "node.kubernetes.io/not-ready",
+        "operator": "Exists",
+        "effect": "NoExecute",
+        "tolerationSeconds": 300
+      },
+      {
+        "key": "node.kubernetes.io/unreachable",
+        "operator": "Exists",
+        "effect": "NoExecute",
+        "tolerationSeconds": 300
+      }
+    ],
+    "priorityClassName": "system-node-critical",
+    "priority": 2000001000,
+    "enableServiceLinks": true,
+    "preemptionPolicy": "PreemptLowerPriority"
+  },
+  "status": {
+    "phase": "Running",
+    "conditions": [
+      {
+        "type": "PodReadyToStartContainers",
+        "status": "True",
+        "lastProbeTime": null,
+        "lastTransitionTime": "2024-04-23T16:04:47Z"
+      },
+      {
+        "type": "Initialized",
+        "status": "True",
+        "lastProbeTime": null,
+        "lastTransitionTime": "2024-04-23T16:04:44Z"
+      },
+      {
+        "type": "Ready",
+        "status": "True",
+        "lastProbeTime": null,
+        "lastTransitionTime": "2024-04-23T16:04:47Z"
+      },
+      {
+        "type": "ContainersReady",
+        "status": "True",
+        "lastProbeTime": null,
+        "lastTransitionTime": "2024-04-23T16:04:47Z"
+      },
+      {
+        "type": "PodScheduled",
+        "status": "True",
+        "lastProbeTime": null,
+        "lastTransitionTime": "2024-04-23T16:04:43Z"
+      }
+    ],
+    "hostIP": "10.0.17.237",
+    "hostIPs": [
+      {
+        "ip": "10.0.17.237"
+      }
+    ],
+    "podIP": "10.0.17.237",
+    "podIPs": [
+      {
+        "ip": "10.0.17.237"
+      }
+    ],
+    "startTime": "2024-04-23T16:04:44Z",
+    "containerStatuses": [
+      {
+        "name": "coredns",
+        "state": {
+          "running": {
+            "startedAt": "2024-04-23T16:04:46Z"
+          }
+        },
+        "lastState": {},
+        "ready": true,
+        "restartCount": 0,
+        "image": "602401143452.dkr.ecr.eu-west-2.amazonaws.com/eks/coredns:v1.11.1-eksbuild.4",
+        "imageID": "602401143452.dkr.ecr.eu-west-2.amazonaws.com/eks/coredns@sha256:25c8d2f85de97de3633c09553c65f1c34bc3e16b6d896e7e72ed01711eed3e0f",
+        "containerID": "containerd://4fc051d582a9a97099c565a8554ce6b52e90b268f37436c041d39f62ae25ae2f",
+        "started": true
+      }
+    ],
+    "qosClass": "Guaranteed"
+  }
+}
