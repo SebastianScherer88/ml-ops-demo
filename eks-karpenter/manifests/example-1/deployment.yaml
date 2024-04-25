@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: inflate
+  name: inflate-1
 spec:
   replicas: 0
   selector:

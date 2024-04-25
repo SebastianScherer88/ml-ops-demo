@@ -1,8 +1,11 @@
 # Karpenter Example
 
-Configuration in this directory creates an AWS EKS cluster with [Karpenter](https://karpenter.sh/) provisioned for managing compute resource scaling. In the example provided, Karpenter is running on EKS Fargate yet Karpenter is providing compute in the form of EC2 instances.
+Taken from [the great official terraform karpenter example](https://github.com/terraform-aws-modules/terraform-aws-eks/blob/master/examples/karpenter/main.tf) here with only minor tweaks. Those tweaks are:
+- move the karpenter controller from fargate back onto the self managed EKS cluster
+- create a service linked role ahead of time for the karpenter controller
+- use the `Whenunderutilized` consolidation instead of the `Whenempty` one to avoid low level cluster workloads accumulating on the karpenter provisionsed nodes and stopping them from being de-provisioned
 
-## Usage
+## Infrastructure
 
 To run this example you need to execute:
 
@@ -12,14 +15,21 @@ $ terraform plan
 $ terraform apply
 ```
 
-Once the cluster is up and running, you can check that Karpenter is functioning as intended with the following command:
+Then, configure your kubectl to use the newly created EKS cluster:
 
 ```bash
 # First, make sure you have updated your local kubeconfig
-aws eks --region eu-west-1 update-kubeconfig --name ex-karpenter
+aws eks --region eu-west-2 update-kubeconfig --name eks-karpenter
+```
+
+## Example 1: Karpenter node scaling
+
+Once the cluster is up and running, you can check that Karpenter is functioning as intended with the following command:
+
+```bash
 
 # Second, scale the example deployment
-kubectl scale deployment inflate --replicas 5
+kubectl scale deployment inflate-1 --replicas 200
 
 # You can watch Karpenter's controller logs with
 kubectl logs -f -n karpenter -l app.kubernetes.io/name=karpenter -c controller
@@ -27,14 +37,36 @@ kubectl logs -f -n karpenter -l app.kubernetes.io/name=karpenter -c controller
 
 You should see a new node named `karpenter.sh/provisioner-name/default` eventually come up in the console; this was provisioned by Karpenter in response to the scaled deployment above.
 
-### Tear Down & Clean-Up
+## Example 2: Karpenter + Metrics server node scaling
+
+This example will test the horizontal pod autoscaler together with karpenter. To generate cluster internal traffic to the example 2 deployment, run
+
+```bash
+kubectl run -i --tty load-generator --rm --image=busybox:1.28 --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://inflate-2; done"
+```
+
+Observe the HPA controller in one terminal by running
+
+```bash
+kubectl get hpa inflate-2 --watch
+```
+
+Observe the karpenter controller logs:
+
+```bash
+kubectl logs -f -n karpenter -l app.kubernetes.io/name=karpenter -c controller
+```
+
+You should see a new node named `karpenter.sh/provisioner-name/default` eventually come up in the console; this was provisioned by Karpenter in response to the scaled deployment, which was a result of the HPA reacting to the traffic we created above.
+
+## Tear Down & Clean-Up
 
 Because Karpenter manages the state of node resources outside of Terraform, Karpenter created resources will need to be de-provisioned first before removing the remaining resources with Terraform.
 
 1. Remove the example deployment created above and any nodes created by Karpenter
 
 ```bash
-kubectl delete deployment inflate
+kubectl delete deployment inflate-1
 kubectl delete node -l karpenter.sh/provisioner-name=default
 ```
 

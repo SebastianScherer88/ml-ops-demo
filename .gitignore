@@ -8,6 +8,8 @@ kubectl.sha256
 *.tfstate
 *.tfstate.*
 *.tfplan
+*.lock.hcl
+terraform-plan
 
 # Crash log files
 crash.log

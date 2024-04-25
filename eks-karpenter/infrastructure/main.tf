@@ -56,6 +56,38 @@ locals {
 }
 
 ################################################################################
+# Supporting Resources
+################################################################################
+
+module "vpc" {
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "~> 5.0"
+
+  name = "${local.name}-vpc"
+  cidr = local.vpc_cidr
+
+  azs             = local.azs
+  private_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 4, k)]
+  public_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 48)]
+  intra_subnets   = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 52)]
+
+  enable_nat_gateway = true
+  single_nat_gateway = true
+
+  public_subnet_tags = {
+    "kubernetes.io/role/elb" = 1
+  }
+
+  private_subnet_tags = {
+    "kubernetes.io/role/internal-elb" = 1
+    # Tags subnets for Karpenter auto-discovery
+    "karpenter.sh/discovery" = local.name
+  }
+
+  tags = local.tags
+}
+
+################################################################################
 # EKS Module
 ################################################################################
 
@@ -93,19 +125,6 @@ module "eks" {
   # Fargate profiles use the cluster primary security group so these are not utilized
   create_cluster_security_group = false
   create_node_security_group    = false
-
-  # fargate_profiles = {
-  #   karpenter = {
-  #     selectors = [
-  #       { namespace = "karpenter" }
-  #     ]
-  #   }
-  #   kube-system = {
-  #     selectors = [
-  #       { namespace = "kube-system" }
-  #     ]
-  #   }
-  # }
 
   tags = merge(local.tags, {
     # NOTE - if creating multiple security groups with this module, only tag the
@@ -152,6 +171,29 @@ module "karpenter_disabled" {
   source = "terraform-aws-modules/eks/aws//modules/karpenter"
 
   create = false
+}
+
+################################################################################
+# Metrics server chart & manifests
+# Required for the HPA + karpenter example
+################################################################################
+
+resource "helm_release" "metrics_server" {
+  name             = "metrics-server"
+  repository       = "https://kubernetes-sigs.github.io/metrics-server/"
+  chart            = "metrics-server"
+  version          = "3.12.1"
+  namespace        = "kube-system"
+  create_namespace = false
+
+  values = [
+    <<-EOT
+    clusterName: ${module.eks.cluster_name}
+    image.tag: v0.7.1
+    serviceAccount:
+      name: metrics-server
+    EOT
+  ]
 }
 
 ################################################################################
@@ -208,102 +250,51 @@ resource "kubectl_manifest" "karpenter_node_class" {
   ]
 }
 
-resource "kubectl_manifest" "karpenter_node_pool" {
-  yaml_body = <<-YAML
-    apiVersion: karpenter.sh/v1beta1
-    kind: NodePool
-    metadata:
-      name: default
-    spec:
-      template:
-        spec:
-          nodeClassRef:
-            name: default
-          requirements:
-            - key: "karpenter.k8s.aws/instance-category"
-              operator: In
-              values: ["c", "m", "r"]
-            - key: "karpenter.k8s.aws/instance-cpu"
-              operator: In
-              values: ["4", "8", "16", "32"]
-            - key: "karpenter.k8s.aws/instance-hypervisor"
-              operator: In
-              values: ["nitro"]
-            - key: "karpenter.k8s.aws/instance-generation"
-              operator: Gt
-              values: ["2"]
-      limits:
-        cpu: 1000
-      disruption:
-        consolidationPolicy: WhenUnderutilized
-        expireAfter: 30s
-  YAML
+# karpenter nodepool
+data "kubectl_file_documents" "karpenter_node_pool" {
+  content = file("../manifests/nodepool.yaml")
+}
 
+resource "kubectl_manifest" "karpenter_node_pool" {
+  for_each  = data.kubectl_file_documents.karpenter_node_pool.manifests
+  yaml_body = each.value
+  
   depends_on = [
     kubectl_manifest.karpenter_node_class
   ]
 }
 
+################################################################################
+# HPA & Karpenter example manifests
+################################################################################
+
+# example deployment 1
+data "kubectl_file_documents" "example_1" {
+  content = file("../manifests/example-1/deployment.yaml")
+}
+
 # Example deployment using the [pause image](https://www.ianlewis.org/en/almighty-pause-container)
 # and starts with zero replicas
-resource "kubectl_manifest" "karpenter_example_deployment" {
-  yaml_body = <<-YAML
-    apiVersion: apps/v1
-    kind: Deployment
-    metadata:
-      name: inflate
-    spec:
-      replicas: 0
-      selector:
-        matchLabels:
-          app: inflate
-      template:
-        metadata:
-          labels:
-            app: inflate
-        spec:
-          terminationGracePeriodSeconds: 0
-          containers:
-            - name: inflate
-              image: public.ecr.aws/eks-distro/kubernetes/pause:3.7
-              resources:
-                requests:
-                  cpu: 1
-  YAML
+resource "kubectl_manifest" "example_1" {
+  for_each = data.kubectl_file_documents.example_1.manifests
+  yaml_body = each.value
 
   depends_on = [
-    helm_release.karpenter
+    kubectl_manifest.karpenter_node_pool
   ]
 }
 
-################################################################################
-# Supporting Resources
-################################################################################
+# example deployment 2
+data "kubectl_path_documents" "example_2" {
+    pattern = "../manifests/example-2/*.yaml"
+}
 
-module "vpc" {
-  source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 5.0"
+resource "kubectl_manifest" "example_2" {
+    for_each  = toset(data.kubectl_path_documents.example_2.documents)
+    yaml_body = each.value
 
-  name = local.name
-  cidr = local.vpc_cidr
-
-  azs             = local.azs
-  private_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 4, k)]
-  public_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 48)]
-  intra_subnets   = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 52)]
-
-  enable_nat_gateway = true
-  single_nat_gateway = true
-
-  public_subnet_tags = {
-    "kubernetes.io/role/elb" = 1
-  }
-
-  private_subnet_tags = {
-    "kubernetes.io/role/internal-elb" = 1
-    # Tags subnets for Karpenter auto-discovery
-    "karpenter.sh/discovery" = local.name
-  }
-
-  tags = local.tags
+    depends_on = [
+      helm_release.metrics_server,
+      kubectl_manifest.karpenter_node_pool
+    ]
 }
