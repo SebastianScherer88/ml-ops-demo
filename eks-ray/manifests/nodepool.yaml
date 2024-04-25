@@ -24,4 +24,4 @@ spec:
     cpu: 1000
   disruption:
     consolidationPolicy: WhenUnderutilized
-    expireAfter: 30s
+    expireAfter: 300s
