@@ -1,0 +1,1 @@
+kind create cluster --image=kindest/node:v1.28.0 #--config kind-cluster.yaml
