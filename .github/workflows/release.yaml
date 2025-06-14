@@ -95,6 +95,7 @@ jobs:
           # Config file is optional if using default path
           # config-name: release-drafter.yml
           # Optionally specify target branch via environment variable (see below)
+          config-file: .github/release-drafter.yaml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # The branch to draft the release from
