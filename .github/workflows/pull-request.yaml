@@ -1,0 +1,77 @@
+name: Label PR
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install GitHub CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install gh -y
+
+      - name: Detect changes in A
+        id: topic-a-changed
+        uses: tj-actions/changed-files@v46
+        with: 
+          files: |
+            topics/A/**
+
+      - name: Detect changes in B
+        id: topic-b-changed
+        uses: tj-actions/changed-files@v46
+        with: 
+          files: |
+            topics/B/**
+
+      - name: Detect changes in B
+        id: ci-changed
+        uses: tj-actions/changed-files@v46
+        with: 
+            files: |
+              .github/workflows/**
+
+      - name: checkout
+        uses: actions/checkout@v4.2.2
+
+      - name: Create label if it doesn't exist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Check if label exists
+          if ! gh label list | grep -q "^topic-A"; then
+            gh label create "topic-A :ml-model:" --color FFCC00 --description "Label for Topic A"
+          fi
+          if ! gh label list | grep -q "^topic-B"; then
+            gh label create "topic-B :shipit:" --color FFCC00 --description "Label for Topic B"
+          fi
+          if ! gh label list | grep -q "^ci"; then
+            gh label create "ci ⚙️" --color FFCC00 --description "Label for CI"
+          fi
+
+      - name: Add A label to current PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: ${{ steps.topic-a-changed.outputs.any_changed == 'true' }}
+        run: |
+          PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+          gh pr edit "$PR_NUMBER" --add-label "topic-A"
+
+      - name: Add B label to current PR
+        env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: ${{ steps.topic-b-changed.outputs.any_changed == 'true' }}
+        run: |
+            PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+            gh pr edit "$PR_NUMBER" --add-label "topic-B"
+
+      - name: Add CI label to current PR
+        env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: ${{ steps.ci-changed.outputs.any_changed == 'true' }}
+        run: |
+            PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+            gh pr edit "$PR_NUMBER" --add-label "ci ⚙️"
