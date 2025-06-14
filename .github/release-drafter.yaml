@@ -1,0 +1,29 @@
+name-template: 'v$NEXT_PATCH_VERSION 🚀'
+tag-template: 'v$NEXT_PATCH_VERSION'
+categories:
+  - title: '⚙️ CI'
+    labels:
+      - "ci ⚙️"
+  - title: ':smiley: Topic A'
+    labels:
+      - "topic-A"
+  - title: ':grin: Topic B'
+    labels:
+      - "topic-B"
+  - title: '🚀 Features'
+    labels:
+      - enhancement
+      - feature
+  - title: '🐛 Bug Fixes'
+    labels:
+      - bug
+  - title: '🧰 Maintenance'
+    labels:
+      - chore
+      - refactor
+change-template: '- ${{title}} [#${{number}}](${{url}}) (@${{author}})'
+no-changes-template: '- No changes'
+template: |
+  ## Changes in this release
+
+  $CHANGES
