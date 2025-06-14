@@ -4,7 +4,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  get-last-release:
+  changes-since-last-release:
+
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -78,3 +79,23 @@ jobs:
           echo "Topic A changed: ${{ steps.topic-a-changed.outputs.any_changed == 'true' }}"
           echo "Topic B changed: ${{ steps.topic-b-changed.outputs.any_changed == 'true' }}"
           echo "CI changed: ${{ steps.ci-changed.outputs.any_changed == 'true' }}"
+
+  draft_release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Important for release-drafter to get full history
+
+      - name: Run Release Drafter
+        uses: release-drafter/release-drafter@v5
+        with:
+          version-template: 'v$NEXT_PATCH_VERSION' # Customize your version scheme here
+          # Config file is optional if using default path
+          # config-name: release-drafter.yml
+          # Optionally specify target branch via environment variable (see below)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # The branch to draft the release from
+          GITHUB_REF_NAME: ${{ github.event.inputs.branch }}
