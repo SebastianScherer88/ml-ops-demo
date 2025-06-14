@@ -14,7 +14,7 @@ jobs:
           sudo apt-get install gh -y
 
       - name: Detect changes in A
-        id: topic-A-changed
+        id: topic-a-changed
         uses: tj-actions/changed-files@v46
         with: 
           files: |
@@ -30,7 +30,7 @@ jobs:
       - name: Add A label to current PR
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        if: ${{ steps.topic-A-changed.outputs.any-changed == 'true' }}
+        if: ${{ steps.topic-a-changed.outputs.any_changed == 'true' }}
         run: |
           PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
           gh pr edit "$PR_NUMBER" --add-label "topic-A"
@@ -38,7 +38,7 @@ jobs:
       - name: Add B label to current PR
         env:
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        if: ${{ steps.topic-A-changed.outputs.any-changed == 'true' }}
+        if: ${{ steps.topic-b-changed.outputs.any_changed == 'true' }}
         run: |
             PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
             gh pr edit "$PR_NUMBER" --add-label "topic-B"
