@@ -1,0 +1,38 @@
+name: Get Last Release Commit
+
+on:
+  workflow_dispatch:
+
+jobs:
+  get-last-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install GitHub CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gh
+
+      - name: Authenticate GitHub CLI
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh auth setup-git
+
+      - name: Get latest release commit SHA
+        id: last_release_commit
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Fetch the latest release tag name
+          TAG=$(gh release list --limit 1 --repo $GITHUB_REPOSITORY --json tagName --jq '.[0].tagName')
+          echo "Latest release tag: $TAG"
+
+          # Get the commit SHA that the tag points to
+          COMMIT_SHA=$(git ls-remote https://github.com/$GITHUB_REPOSITORY.git refs/tags/$TAG | awk '{print $1}')
+          echo "Commit SHA for tag $TAG: $COMMIT_SHA"
+
+          # Export the SHA as output for next steps
+          echo "::set-output name=commit_sha::$COMMIT_SHA"
+
+      - name: Use commit SHA
+        run: echo "Last release commit SHA is ${{ steps.last_release_commit.outputs.commit_sha }}"
