@@ -39,14 +39,6 @@ jobs:
       - name: Use commit SHA
         run: echo "Last release commit SHA is ${{ steps.last_release_commit.outputs.commit_sha }}"
 
-
-      - name: Detect changed files since last release
-        uses: tj-actions/changed-files@v46
-        id: changed-files
-        with:
-          base: ${{ steps.last_release_commit.outputs.commit_sha }}
-          head: ${{ github.ref }}
-
       - name: Install GitHub CLI
         run: |
             sudo apt-get update
@@ -55,22 +47,28 @@ jobs:
       - name: Detect changes in A
         id: topic-a-changed
         uses: tj-actions/changed-files@v46
-        with: 
-            files: |
+        with:
+          base: ${{ steps.last_release_commit.outputs.commit_sha }}
+          head: ${{ github.ref_name }} 
+          files: |
               topics/A/**
   
       - name: Detect changes in B
         id: topic-b-changed
         uses: tj-actions/changed-files@v46
-        with: 
-            files: |
+        with:
+          base: ${{ steps.last_release_commit.outputs.commit_sha }}
+          head: ${{ github.ref_name }} 
+          files: |
               topics/B/**
   
       - name: Detect changes in B
         id: ci-changed
         uses: tj-actions/changed-files@v46
-        with: 
-              files: |
+        with:
+          base: ${{ steps.last_release_commit.outputs.commit_sha }}
+          head: ${{ github.ref_name }} 
+          files: |
                 .github/workflows/**
   
       - name: Check release diff
