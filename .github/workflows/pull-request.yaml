@@ -1,0 +1,44 @@
+name: Label PR
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install GitHub CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install gh -y
+
+      - name: Detect changes in A
+        id: topic-A-changed
+        uses: tj-actions/changed-files@v46
+        with: 
+          files: |
+            topics/A/**
+
+      - name: Detect changes in B
+        id: topic-b-changed
+        uses: tj-actions/changed-files@v46
+        with: 
+          files: |
+            topics/B/**
+
+      - name: Add A label to current PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: ${{ steps.topic-A-changed.outputs.any-changed == 'true' }}
+        run: |
+          PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+          gh pr edit "$PR_NUMBER" --add-label "topic-A"
+
+      - name: Add B label to current PR
+        env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: ${{ steps.topic-A-changed.outputs.any-changed == 'true' }}
+        run: |
+            PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+            gh pr edit "$PR_NUMBER" --add-label "topic-B"
