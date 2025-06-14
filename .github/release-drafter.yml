@@ -21,7 +21,7 @@ categories:
     labels:
       - chore
       - refactor
-change-template: '- ${{title}} [#${{number}}](${{url}}) (@${{author}})'
+change-template: '- ${title} [#${number}](${url}) (@${author})'
 no-changes-template: '- No changes'
 template: |
   ## Changes in this release
