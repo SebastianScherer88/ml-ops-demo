@@ -27,6 +27,13 @@ jobs:
           files: |
             topics/B/**
 
+      - name: Detect changes in B
+        id: ci-changed
+        uses: tj-actions/changed-files@v46
+        with: 
+            files: |
+              .github/workflows/**
+
       - name: checkout
         uses: actions/checkout@v4.2.2
 
@@ -36,10 +43,13 @@ jobs:
         run: |
           # Check if label exists
           if ! gh label list | grep -q "^topic-A"; then
-            gh label create "topic-A" --color FFCC00 --description "Label for Topic A :bug:"
+            gh label create "topic-A :ml-model:" --color FFCC00 --description "Label for Topic A"
           fi
           if ! gh label list | grep -q "^topic-B"; then
-            gh label create "topic-B" --color FFCC00 --description "Label for Topic B :shipit:"
+            gh label create "topic-B :shipit:" --color FFCC00 --description "Label for Topic B"
+          fi
+          if ! gh label list | grep -q "^ci"; then
+            gh label create "ci ⚙️" --color FFCC00 --description "Label for CI"
           fi
 
       - name: Add A label to current PR
@@ -57,3 +67,11 @@ jobs:
         run: |
             PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
             gh pr edit "$PR_NUMBER" --add-label "topic-B"
+
+      - name: Add CI label to current PR
+        env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: ${{ steps.ci-changed.outputs.any_changed == 'true' }}
+        run: |
+            PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+            gh pr edit "$PR_NUMBER" --add-label "ci ⚙️"
