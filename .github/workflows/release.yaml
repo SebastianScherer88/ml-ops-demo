@@ -89,7 +89,7 @@ jobs:
           fetch-depth: 0  # Important for release-drafter to get full history
 
       - name: Run Release Drafter
-        uses: release-drafter/release-drafter@v5
+        uses: release-drafter/release-drafter@v6.1
         with:
           version-template: 'v$NEXT_PATCH_VERSION' # Customize your version scheme here
           # Config file is optional if using default path
