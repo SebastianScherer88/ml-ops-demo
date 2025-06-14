@@ -49,8 +49,8 @@ jobs:
         id: topic-a-changed
         uses: tj-actions/changed-files@v46
         with:
-          base: ${{ steps.last_release_commit.outputs.commit_sha }}
-          head: ${{ github.ref_name }} 
+          base_sha: ${{ steps.last_release_commit.outputs.commit_sha }}
+          sha: ${{ github.ref_name }} 
           files: |
               topics/A/**
   
@@ -58,8 +58,8 @@ jobs:
         id: topic-b-changed
         uses: tj-actions/changed-files@v46
         with:
-          base: ${{ steps.last_release_commit.outputs.commit_sha }}
-          head: ${{ github.ref_name }} 
+          base_sha: ${{ steps.last_release_commit.outputs.commit_sha }}
+          sha: ${{ github.ref_name }} 
           files: |
               topics/B/**
   
@@ -67,8 +67,8 @@ jobs:
         id: ci-changed
         uses: tj-actions/changed-files@v46
         with:
-          base: ${{ steps.last_release_commit.outputs.commit_sha }}
-          head: ${{ github.ref_name }} 
+          base_sha: ${{ steps.last_release_commit.outputs.commit_sha }}
+          sha: ${{ github.ref_name }} 
           files: |
                 .github/workflows/**
   
@@ -89,13 +89,8 @@ jobs:
           fetch-depth: 0  # Important for release-drafter to get full history
 
       - name: Run Release Drafter
-        uses: release-drafter/release-drafter@v6.1.0
-        with:
-          version-template: 'v$NEXT_PATCH_VERSION' # Customize your version scheme here
-          # Config file is optional if using default path
-          # config-name: release-drafter.yml
-          # Optionally specify target branch via environment variable (see below)
-          config-file: .github/release-drafter.yaml
+        uses: release-drafter/release-drafter@v6.1.0  
+          
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # The branch to draft the release from
