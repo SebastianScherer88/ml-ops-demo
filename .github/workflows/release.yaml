@@ -63,7 +63,7 @@ jobs:
           files: |
               topics/B/**
   
-      - name: Detect changes in B
+      - name: Detect changes in CI
         id: ci-changed
         uses: tj-actions/changed-files@v46
         with:
