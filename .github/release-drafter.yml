@@ -1,6 +1,8 @@
-version-template: 'v$RESOLVED_VERSION' # Customize your version scheme here
-name-template: 'v$RESOLVED_VERSION 🚀'
+name-template: 'v$RESOLVED_VERSION'
 tag-template: 'v$RESOLVED_VERSION'
+version-template: $MAJOR.$MINOR.$PATCH-$PRERELEASE.$PRERELEASE_VERSION
+prerelease-identifier: beta
+include-pre-releases: true
 categories:
   - title: '⚙️ CI'
     labels:
