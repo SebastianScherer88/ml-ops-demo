@@ -1,6 +1,7 @@
 version-template: 'v$RESOLVED_VERSION' # Customize your version scheme here
 name-template: 'v$RESOLVED_VERSION 🚀'
-tag-template: 'v$RESOLVED_VERSION'
+tag-template: ''
+prerelease-identifier: pre
 categories:
   - title: '⚙️ CI'
     labels:

@@ -24,7 +24,6 @@ jobs:
           publish: true
           include-preleases: ${{ github.ref_name == 'dev'}}
           prerelease: ${{ github.ref_name == 'dev'}}
-          prerelease-identifier: 'pre'
           
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
