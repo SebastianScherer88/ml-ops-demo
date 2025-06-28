@@ -23,6 +23,7 @@ jobs:
         with:
           publish: true
           prerelease: ${{ github.ref_name == 'dev'}}
+          prerelease-identifier: 'pre'
           
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
