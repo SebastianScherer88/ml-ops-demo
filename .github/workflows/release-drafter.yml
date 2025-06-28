@@ -22,6 +22,7 @@ jobs:
         uses: release-drafter/release-drafter@v6.1.0
         with:
           publish: true
+          include-preleases: ${{ github.ref_name == 'dev'}}
           prerelease: ${{ github.ref_name == 'dev'}}
           prerelease-identifier: 'pre'
           
