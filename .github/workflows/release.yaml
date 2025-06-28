@@ -4,9 +4,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  get-last-release:
+  changes-since-last-release:
+
     runs-on: ubuntu-latest
     steps:
+      - name: checkout
+        uses: actions/checkout@v4.2.2
       - name: Install GitHub CLI
         run: |
           sudo apt-get update
@@ -36,3 +39,59 @@ jobs:
 
       - name: Use commit SHA
         run: echo "Last release commit SHA is ${{ steps.last_release_commit.outputs.commit_sha }}"
+
+      - name: Install GitHub CLI
+        run: |
+            sudo apt-get update
+            sudo apt-get install gh -y
+  
+      - name: Detect changes in A
+        id: topic-a-changed
+        uses: tj-actions/changed-files@v46
+        with:
+          base_sha: ${{ steps.last_release_commit.outputs.commit_sha }}
+          sha: ${{ github.ref_name }} 
+          files: |
+              topics/A/**
+  
+      - name: Detect changes in B
+        id: topic-b-changed
+        uses: tj-actions/changed-files@v46
+        with:
+          base_sha: ${{ steps.last_release_commit.outputs.commit_sha }}
+          sha: ${{ github.ref_name }} 
+          files: |
+              topics/B/**
+  
+      - name: Detect changes in CI
+        id: ci-changed
+        uses: tj-actions/changed-files@v46
+        with:
+          base_sha: ${{ steps.last_release_commit.outputs.commit_sha }}
+          sha: ${{ github.ref_name }} 
+          files: |
+                .github/workflows/**
+  
+      - name: Check release diff
+        env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Topic A changed: ${{ steps.topic-a-changed.outputs.any_changed == 'true' }}"
+          echo "Topic B changed: ${{ steps.topic-b-changed.outputs.any_changed == 'true' }}"
+          echo "CI changed: ${{ steps.ci-changed.outputs.any_changed == 'true' }}"
+
+  draft_release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Important for release-drafter to get full history
+
+      - name: Run Release Drafter
+        uses: release-drafter/release-drafter@v6.1.0  
+          
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # The branch to draft the release from
+          GITHUB_REF_NAME: ${{ github.event.inputs.branch }}
