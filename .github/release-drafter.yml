@@ -1,6 +1,6 @@
 name-template: 'v$RESOLVED_VERSION'
 tag-template: 'v$RESOLVED_VERSION'
-version-template: $MAJOR.$MINOR.$PATCH-$PRERELEASE.$PRERELEASE_VERSION
+version-template: $MAJOR.$MINOR.$PATCH$PRERELEASE
 prerelease-identifier: beta
 include-pre-releases: true
 categories:
