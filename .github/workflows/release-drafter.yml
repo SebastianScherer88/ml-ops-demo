@@ -3,8 +3,8 @@ name: Create release
 on:
   push:
     branches:
-      - dev
-      - main
+      - 'dev'
+      - 'main'
 jobs:
   draft-and-publish-release:
     runs-on: ubuntu-latest
