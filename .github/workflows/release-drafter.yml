@@ -3,8 +3,8 @@ name: Create release
 on:
   push:
     branches:
-      - dev
-      - main
+      - 'dev'
+      - 'main'
 jobs:
   draft-and-publish-release:
     runs-on: ubuntu-latest
@@ -23,6 +23,7 @@ jobs:
         with:
           publish: true
           prerelease: ${{ github.ref_name == 'dev'}}
+          prerelease-identifier: 'pre'
           
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
